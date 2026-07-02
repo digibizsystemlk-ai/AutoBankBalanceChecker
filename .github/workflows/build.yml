@@ -11,12 +11,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # GitHub එකට ආපහු ලියන්න අවසර දෙනවා
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -55,6 +55,7 @@ jobs:
         run: |
           git config --global user.name "GitHub Action"
           git config --global user.email "action@github.com"
-          git add android/ build/app/outputs/flutter-apk/app-release.apk
+          git add android/
+          git add -f build/app/outputs/flutter-apk/app-release.apk  # gitignore එක බයිපාස් කරලා බලෙන්ම ඇඩ් කරනවා
           git commit -m "Automated commit: Added android folder and release APK from Cloud Build" || exit 0
           git push origin main

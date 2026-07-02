@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Java
         uses: actions/setup-java@v3
@@ -48,3 +50,11 @@ jobs:
 
       - name: Build APK
         run: flutter build apk --release
+
+      - name: Commit and Push Android Folder & APK back to Git
+        run: |
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
+          git add android/ build/app/outputs/flutter-apk/app-release.apk
+          git commit -m "Automated commit: Added android folder and release APK from Cloud Build" || exit 0
+          git push origin main
